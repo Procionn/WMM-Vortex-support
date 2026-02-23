@@ -16,10 +16,18 @@
 
 class PluginInterface
 {
+protected:
+    const bool demon = false;
+    // If the extensions is demon - switch to true
+    // If the extension is service - switch to false
+    PluginInterface (const bool isDemon = false) : demon(isDemon) {}
+
 public:
     virtual ~PluginInterface() = default;
-    virtual void plugin_main() = 0;
+    virtual void main() = 0;
     virtual QString name() = 0;
+    virtual QString get_icon_path () { return ""; }
+    virtual bool is_demon () { return demon; }
 };
 
 
@@ -27,4 +35,3 @@ public:
 Q_DECLARE_INTERFACE(PluginInterface, PluginInterface_iid)
 
 #endif // PLUGININTERFACE_H
-

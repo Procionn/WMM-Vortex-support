@@ -23,35 +23,33 @@
 class Core;
 namespace WMM {
 
-class WMMAPI_EXPORT APICore {
-    Core* ptr;
+    class WMMAPI_EXPORT APICore {
+    public:
+        static void start_api(Core*);
 
-public:
-    APICore();
+        void update_lang();
+        QString tr (const QString& key);
+        void load_new_lang_pack (const QString& path);
 
-    void update_lang();
-    QString tr (const QString& key);
-    void load_new_lang_pack (const QString& path);
+        QString get_config (const QString& key);
+        void config_reader();
+        void overwriting_config_data();
+        void set_default (const QString& key, const QString& value);
+        QString get_game_config();
 
-    QString get_config (const QString& key);
-    void config_reader();
-    void overwriting_config_data();
-    void set_default (const QString& key, const QString& value);
-    QString get_game_config();
+        void update_data_from_file();
+        void save_game_path(const QString& path);
+        void game_dir_backup();
+        void game_recovery();
 
-    void update_data_from_file();
-    void save_game_path(const QString& path);
-    void game_dir_backup();
-    void game_recovery();
+        void restorer();
+        void symlink_deliting();
+        void symlink_creating (const QString& targetCollection);
 
-    void restorer();
-    void symlink_deliting();
-    void symlink_creating (const QString& targetCollection);
+        void exporter (const QString& name, const bool monolith);
+        void importer (const QString& path);
 
-    void exporter (const QString& name, const bool monolith);
-    void importer (const QString& path);
-
-    void collector (const QString& name, bool type);
-};
+        void collector (const QString& name, bool type);
+    };
 
 }

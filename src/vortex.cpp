@@ -10,11 +10,10 @@
 #include <string>
 #include <iostream>
 
-
-void Vortex::plugin_main () {
+void Vortex::main () {
     QDialog* window = new QDialog();
     window->setWindowTitle("Vortex Support module");
-    window->show();
+    window->hide();
     list = new QVBoxLayout();
     addScrollable(window, list);
     QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
@@ -24,7 +23,7 @@ void Vortex::plugin_main () {
                 dir.absolutePath() + "/Vortex/downloads/cyberpunk2077/");
     fileDialog->setOption(QFileDialog::DontUseNativeDialog, true);
     fileDialog->setModal(false);
-    list->addWidget(fileDialog);
+    // list->addWidget(fileDialog);
 
     fileDialog->setFileMode(QFileDialog::Directory);
     fileDialog->setOption(QFileDialog::ShowDirsOnly, true);
@@ -34,8 +33,11 @@ void Vortex::plugin_main () {
         buffer = path;
         fileDialog->reject();
     });
+    connect(fileDialog, &QFileDialog::rejected, [fileDialog] { fileDialog->deleteLater(); });
+    fileDialog->setAttribute(Qt::WA_DeleteOnClose);
     fileDialog->exec();
     window->setWindowTitle("Vortex Support module");
+    window->show();
 
     gen_front(get_ir(buffer));
 }
