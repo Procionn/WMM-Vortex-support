@@ -52,7 +52,7 @@ target_include_directories(${PLUGIN} PUBLIC
 
 find_library(WMM_API_LIB
         NAMES wmmAPI-1.0
-        PATHS ${CMAKE_BINARY_DIR}/../../build/src
+        PATHS ${CMAKE_SOURCE_DIR}/bin
         NO_DEFAULT_PATH
 )
 
@@ -67,17 +67,19 @@ set_target_properties(${PLUGIN} PROPERTIES
     PREFIX ""
 )
 
-
-set_target_properties(${PLUGIN} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../../build/src/plugins/${PLUGIN}
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../../build/src/plugins/${PLUGIN}
-)
+if (DEV)
+    set_target_properties(${PLUGIN} PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../../build/src/plugins/${PLUGIN}
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../../build/src/plugins/${PLUGIN}
+    )
+    add_custom_command(TARGET ${PLUGIN} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_CURRENT_SOURCE_DIR}/configs/lang
+            ${CMAKE_CURRENT_BINARY_DIR}/../../build/src/plugins/${PLUGIN}/lang
+            COMMENT "Copying configs to build directory"
+    )
+endif()
 
 target_compile_definitions(${PLUGIN} PRIVATE VORTEX_LIBRARY)
 
-add_custom_command(TARGET ${PLUGIN} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_CURRENT_SOURCE_DIR}/configs/lang
-        ${CMAKE_CURRENT_BINARY_DIR}/../../build/src/plugins/${PLUGIN}/lang
-        COMMENT "Copying configs to build directory"
-)
+
