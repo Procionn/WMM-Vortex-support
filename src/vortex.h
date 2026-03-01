@@ -1,3 +1,19 @@
+/*
+ *  Copyright (C) 2025 Procion ByProcion@gmail.com
+ *
+ *  This file is part of WMM-Vortex-support.
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  See the LICENSE file for more details.
+ *
+ */
 #ifndef VORTEX_H
 #define VORTEX_H
 
@@ -7,6 +23,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QtCore/qglobal.h>
+#include <QDialog>
 
 #if defined(VORTEX_LIBRARY)
     #define VORTEX_EXPORT Q_DECL_EXPORT
@@ -16,9 +33,10 @@
 
 struct ir {
     const uint64_t modId;
-    const QString modName, modVersion;
-    ir (const uint64_t& id, const QString& name, const QString& version)
-        : modId(id), modName(name), modVersion(version) {}
+    const QString modName, modVersion, stringName;
+    bool target = true;
+    ir (const uint64_t& id, const QString& name, const QString& version, const QString& string)
+        : modId(id), modName(name), modVersion(version), stringName(string) {}
 };
 
 
@@ -26,16 +44,22 @@ class id : public QFrame
 {
 public:
     QVBoxLayout* list;
-    const ir* ptr;
+    ir* ptr;
 
-    id(const ir& ref);
+    id(ir& ref);
 };
 class mod : public QLabel
 {
-public:
-    const ir* ptr;
+    Q_OBJECT
 
-    mod(const ir& ref);
+public:
+    ir* ptr;
+
+    mod(ir& ref);
+
+protected:
+    void mousePressEvent(QMouseEvent* event) override;
+    void recolor();
 };
 
 
@@ -46,9 +70,12 @@ class VORTEX_EXPORT Vortex : public QObject, public PluginInterface
     Q_PLUGIN_METADATA(IID PluginInterface_iid)
     Q_INTERFACES(PluginInterface)
     QVBoxLayout* list;
+    std::vector<ir*> data;
+    QDialog* window;
+    QString dir;
 
-    std::vector<ir*> get_ir(const QString& dir);
-    void gen_front(std::vector<ir*>);
+    void get_ir();
+    void gen_front();
 
 public:
     Vortex() = default;
@@ -57,6 +84,39 @@ public:
     virtual QString name() {
         return "Vortex Support";
     }
+
+protected slots:
+    void installing();
+    void destruct();
 };
+
+
+class QPushButton;
+class QHBoxLayout;
+class ButtonBox : public QFrame {
+    Q_OBJECT
+    QPushButton* cansel;
+    QPushButton* apply;
+    QHBoxLayout* layout;
+
+public:
+    ButtonBox();
+
+signals:
+    void apply_clicked();
+    void cancel_clicked();
+};
+
+
+class ERRORdialog : public QDialog {
+    Q_OBJECT
+public:
+    ERRORdialog(const QString& str);
+};
+
+inline void error_dialog(const QString& str) {
+    ERRORdialog dialog(str);
+    dialog.exec();
+}
 
 #endif // VORTEX_H
