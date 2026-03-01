@@ -92,6 +92,8 @@ void Vortex::installing() {
             WMM::APIModManager::load(path);
         }
     }
+    error_dialog(WMM::APICore::tr("VORTEX_LABEL_IMPORT_SUCCES"));
+    destruct();
 }
 
 

@@ -74,3 +74,10 @@ set_target_properties(${PLUGIN} PROPERTIES
 )
 
 target_compile_definitions(${PLUGIN} PRIVATE VORTEX_LIBRARY)
+
+add_custom_command(TARGET ${PLUGIN} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/configs/lang
+        ${CMAKE_CURRENT_BINARY_DIR}/../../build/src/plugins/${PLUGIN}/lang
+        COMMENT "Copying configs to build directory"
+)
