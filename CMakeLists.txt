@@ -51,7 +51,7 @@ target_include_directories(${PLUGIN} PUBLIC
 
 
 find_library(WMM_API_LIB
-        NAMES wmmAPI-1.0
+        NAMES wmmAPI
         PATHS ${CMAKE_SOURCE_DIR}/bin
         NO_DEFAULT_PATH
 )

@@ -87,6 +87,10 @@ void Vortex::installing() {
 
     for (auto entry : data) {
         if (entry->target) {
+            if (WMM::APIModManager::exists(entry->modId, entry->modVersion)) {
+                error_dialog(WMM::APICore::tr("LANG_LABEL_MOD_EXISTS") + " Mod name:" + entry->stringName);
+                continue;
+            }
             path = dir + "/" + entry->stringName;
             std::cout << "Loaded: " << path.toStdString() << std::endl;
             WMM::APIModManager::load(path);
@@ -98,7 +102,6 @@ void Vortex::installing() {
 
 
 void Vortex::get_ir() {
-    std::cout << dir.toStdString() << std::endl;
     QRegularExpression regex(R"(^(.+?)-(\d+)-(\d+(?:-\d+)*)-(\d+)(?:\((\d+)\))?.(\w+)$)");
     QRegularExpressionMatch match;
     for (QString& entry : QDir(dir).entryList(QStringList("*"), QDir::Files)) {
