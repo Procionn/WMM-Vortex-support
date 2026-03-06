@@ -24,7 +24,9 @@
 #include <QDir>
 #include <QRegularExpression>
 #include <string>
-#include <iostream>
+#ifndef NDEBUG
+    #include <iostream>
+#endif
 
 #include "ModManager.h"
 
@@ -66,6 +68,7 @@ void Vortex::main () {
     gen_front();
     ButtonBox* buttonBox = new ButtonBox();
     mainLay->addWidget(buttonBox);
+    connect(window, &QDialog::rejected, this, &Vortex::destruct);
     connect(buttonBox, &ButtonBox::cancel_clicked, this, &Vortex::destruct);
     connect(buttonBox, &ButtonBox::apply_clicked, this, &Vortex::installing);
 }
@@ -92,7 +95,9 @@ void Vortex::installing() {
                 continue;
             }
             path = dir + "/" + entry->stringName;
+#ifndef NDEBUG
             std::cout << "Loaded: " << path.toStdString() << std::endl;
+#endif
             WMM::APIModManager::load(path);
         }
     }
@@ -110,7 +115,11 @@ void Vortex::get_ir() {
             data.emplace_back(new ir(match.captured(2).toULongLong(), match.captured(1), match.captured(3), entry));
         }
         else {
+#ifndef NDEBUG
             std::cerr << regex.errorString().toStdString() << std::endl;
+#else
+            error_dialog(regex.errorString());
+#endif
         }
     }
     std::sort(data.begin(), data.end(), [](const ir* a, const ir* b){
@@ -132,3 +141,7 @@ void Vortex::gen_front() {
     }
 }
 
+
+Vortex::~Vortex () { destruct(); }
+QString Vortex::name () { return "Vortex Support"; }
+QString Vortex::description () { return WMM::APICore::tr("VORTEX_DESCRIPTION"); }

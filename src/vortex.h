@@ -79,11 +79,10 @@ class VORTEX_EXPORT Vortex : public QObject, public PluginInterface
 
 public:
     Vortex() = default;
-    virtual ~Vortex() = default;
-    virtual void main();
-    virtual QString name() {
-        return "Vortex Support";
-    }
+    virtual ~Vortex();
+    virtual void main() override;
+    virtual QString name() override ;
+    virtual QString description() override;
 
 protected slots:
     void installing();
