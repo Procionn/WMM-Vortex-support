@@ -30,8 +30,12 @@
 
 #include "ModManager.h"
 
+Vortex::Vortex() {
+    WMM::APICore::load_new_lang_pack("plugins/Vortex/" +
+                                     WMM::APICore::get_config(QString("WMM_CONFIG_LANGUAGES")));
+}
+
 void Vortex::main () {
-    WMM::APICore::load_new_lang_pack("plugins/Vortex/" + WMM::APICore::get_config(QString("WMM_CONFIG_LANGUAGES")));
     window = new QDialog();
     window->setWindowTitle("Vortex Support module");
     window->setFixedSize(800, 600);

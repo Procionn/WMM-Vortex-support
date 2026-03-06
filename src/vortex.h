@@ -78,7 +78,7 @@ class VORTEX_EXPORT Vortex : public QObject, public PluginInterface
     void gen_front();
 
 public:
-    Vortex() = default;
+    Vortex();
     virtual ~Vortex();
     virtual void main() override;
     virtual QString name() override ;
