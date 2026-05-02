@@ -79,7 +79,8 @@ void Vortex::main () {
 
 void Vortex::destruct() {
     delete window;
-    for (auto* entry : data)
+    window = nullptr;
+    for (auto *entry : data)
         delete entry;
     data.clear();
     list = nullptr;

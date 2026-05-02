@@ -69,9 +69,9 @@ class VORTEX_EXPORT Vortex : public QObject, public PluginInterface
     Q_OBJECT
     Q_PLUGIN_METADATA(IID PluginInterface_iid)
     Q_INTERFACES(PluginInterface)
-    QVBoxLayout* list;
+    QVBoxLayout* list = nullptr;
     std::vector<ir*> data;
-    QDialog* window;
+    QDialog* window = nullptr;
     QString dir;
 
     void get_ir();
